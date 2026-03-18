@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { City } from "../types/City";
+import { City } from "../../types/City";
 
 type Store = {
     data: City | null;

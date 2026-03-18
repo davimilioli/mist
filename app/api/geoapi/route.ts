@@ -1,4 +1,4 @@
-import { GeoApi } from "@/app/types/GeoApi";
+import { GeoApi } from "@/types/GeoApi";
 import { geoApi } from "@/lib/geoApi";
 import { NextResponse } from "next/server";
 

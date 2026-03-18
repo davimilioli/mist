@@ -1,5 +1,5 @@
 import ForecastCard from "./ForecastCard";
-import { City } from "@/app/types/City";
+import { City } from "@/types/City";
 import { formatTemp } from "@/lib/utils";
 
 type Props = {
