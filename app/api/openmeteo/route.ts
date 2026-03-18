@@ -23,7 +23,9 @@ export async function GET(request: Request) {
                 longitude,
                 current: 'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code',
                 daily: 'temperature_2m_max,temperature_2m_min',
-                timezone: 'auto'
+                timezone: 'auto',
+                hourly: 'temperature_2m,weather_code',
+                forecast_days: 1
             }
         });
 
