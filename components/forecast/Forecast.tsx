@@ -8,8 +8,14 @@ import { useState } from "react"
 import DailyForecast from "./DailyForecast"
 
 const Forecast = () => {
-  const [activeTab, setActiveTab] = useState('tomorrow')
+  const [activeTab, setActiveTab] = useState('today')
   const { data } = useWeather();
+
+  const tabs = [
+    { label: "Hoje", slug: "today" },
+    { label: "Amanhã", slug: "tomorrow" },
+    { label: "Próximos 7 dias", slug: "next-7-days" },
+  ];
 
   return (
     <section className="space-y-8">
@@ -19,13 +25,13 @@ const Forecast = () => {
       >
         <div className="flex items-center justify-between mb-8">
           <TabsList className="bg-transparent gap-8 p-0 h-auto">
-            {["Today", "Tomorrow", "Next 7 days"].map((tab) => (
+            {tabs.map((tab) => (
               <TabsTrigger 
-                key={tab}
-                value={tab.toLowerCase().replace(/ /g, "-")} 
+                key={tab.slug}
+                value={tab.slug} 
                 className="data-[state=active]:bg-transparent data-[state=active]:text-zinc-950 data-[state=active]:shadow-none text-zinc-400 font-sans font-bold p-4 transition-all hover:cursor-pointer rounded-xl"
               >
-                {tab}
+                {tab.label}
               </TabsTrigger>
             ))}
           </TabsList>
