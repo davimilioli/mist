@@ -25,7 +25,7 @@ export async function GET(request: Request) {
                 daily: 'temperature_2m_max,temperature_2m_min',
                 timezone: 'auto',
                 hourly: 'temperature_2m,weather_code',
-                forecast_days: 1
+                forecast_days: 3
             }
         });
 

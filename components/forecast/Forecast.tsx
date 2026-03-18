@@ -7,7 +7,7 @@ import HourlyForecast from "./HourlyForecast"
 import { useState } from "react"
 
 const Forecast = () => {
-  const [activeTab, setActiveTab] = useState('today')
+  const [activeTab, setActiveTab] = useState('tomorrow')
   const { data } = useWeather();
 
   return (
@@ -38,6 +38,12 @@ const Forecast = () => {
         <TabsContent value="today" className="mt-0 outline-none">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
             {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly}/> }
+          </div>
+        </TabsContent> 
+
+        <TabsContent value="tomorrow" className="mt-0 outline-none">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+            {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly} day="tomorrow"/> }
           </div>
         </TabsContent> 
         
