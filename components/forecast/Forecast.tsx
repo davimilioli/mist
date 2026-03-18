@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Sun, CloudRain, CloudLightning, Cloud} from "lucide-react"
 import { Button } from "@/components/ui/button"
-import ForecastCard from "./ForcastCard"
+import ForecastCard from "./ForecastCard"
 
 const Forecast = () => {
   return (
