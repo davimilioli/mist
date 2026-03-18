@@ -1,23 +1,52 @@
-import { MapPin, ChevronDown} from "lucide-react"
+"use client"
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,  DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { MapPin, ChevronDown, TrashIcon} from "lucide-react"
+
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel,  DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
+import { useHistory } from "@/app/stores/history"
+import { useWeather } from "@/app/stores/weather"
 
 const CityDropdown = () => {
+    const { recentCities, clearHistory } = useHistory();
+    const { data } = useWeather();
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center ps-0gap-2 hover:bg-white hover:dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 group rounded-xl">
                     <MapPin className="w-4 h-4 text-zinc-400" />
-                    <span className="text-sm font-semibold tracking-tight">Rio de Janeiro, BR</span>
+                    <span className="text-sm font-semibold tracking-tight">{ data ? data.name : recentCities[0] || "Buscas recentes"}</span>
                     <ChevronDown className="w-3 h-3 text-zinc-400 group-data-[state=open]:rotate-180 transition-transform" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56 bg-white dark:bg-zinc-900 rounded-xl">
-                <DropdownMenuLabel className="text-xs text-zinc-400 uppercase tracking-widest font-bold">Cidades</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-xs text-zinc-400 uppercase tracking-widest font-bold">Histórico</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">São Paulo, BR</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">Nova York, US</DropdownMenuItem>
+                {recentCities.length > 0 && 
+                    <>
+                        {recentCities.map((city, index) => (
+                            <DropdownMenuItem
+                                key={index}
+                                className="cursor-pointer"
+                            >
+                                {city}
+                            </DropdownMenuItem>
+                        ))}
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem variant="destructive" className="cursor-pointer" onClick={clearHistory}>
+                                <TrashIcon />
+                                Limpar histórico
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    </>
+                }
+                {recentCities.length == 0 &&
+                    <div className="px-2 py-4 text-center text-xs text-zinc-500 italic">
+                        Sem Histórico
+                    </div>
+                }
             </DropdownMenuContent>
         </DropdownMenu>
     )
