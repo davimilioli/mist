@@ -6,9 +6,11 @@ import { api } from "@/lib/api";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { useHistory } from "@/app/stores/history";
 
 const SearchInput = () => {
     const { setCity, setLoading, setError, isLoading } = useWeather();
+    const { addCityHistory } = useHistory();
     const [cityField, setCityField] = useState<string>('');
 
     const handleSearch = async () => {
@@ -24,7 +26,8 @@ const SearchInput = () => {
             if(!cityReq.data) {
                 alert(cityReq.data.error)
             } else {
-                setCity(cityReq.data)
+                setCity(cityReq.data);
+                addCityHistory(cityReq.data.name)
             } 
 
             setLoading(false);
