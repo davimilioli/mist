@@ -21,13 +21,13 @@ const SearchInput = () => {
         }
     
         try {
-            const cityReq = await api.get(`/weather?city=${cityField.toLocaleLowerCase()}`);
+            const cityReq = await api.get(`/openmeteo?city=${cityField.toLocaleLowerCase()}`);
 
             if(!cityReq.data) {
                 alert(cityReq.data.error)
             } else {
                 setCity(cityReq.data);
-                addCityHistory(cityReq.data.name)
+                addCityHistory(cityReq.data.location)
             } 
 
             setLoading(false);

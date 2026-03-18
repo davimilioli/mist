@@ -1,45 +1,39 @@
 export interface City {
-    coord: {
-    lon: number;
-    lat: number;
+  location: string;
+  latitude: number;
+  longitude: number;
+  generationtime_ms: number;
+  utc_offset_seconds: number;
+  timezone: string;
+  timezone_abbreviation: string;
+  elevation: number;
+  current: {
+    time: string;
+    temperature_2m: number;
+    relative_humidity_2m: number;
+    apparent_temperature: number;
+    wind_speed_10m: number;
+    weather_code: number;
+    is_day: number;
   };
-  weather: Array<{
-    id: number;
-    main: string;
-    description: string;
-    icon: string;
-  }>;
-  base: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    temp_min: number;
-    temp_max: number;
-    pressure: number;
-    humidity: number;
-    sea_level?: number;
-    grnd_level?: number;
+  current_units: {
+    relative_humidity_2m: string;
+    apparent_temperature: string;
+    wind_speed_10m: string;
   };
-  visibility: number;
-  wind: {
-    speed: number;
-    deg: number;
-    gust?: number;
+  hourly?: {
+    time: string[];
+    temperature_2m: number[];
+    weather_code: number[];
   };
-  clouds: {
-    all: number;
+  daily: {
+    time: string[];
+    temperature_2m_max: number[];
+    temperature_2m_min: number[];
+    weather_code: number[];
   };
-  dt: number;
-  sys: {
-    type?: number;
-    id?: number;
-    country: string;
-    sunrise: number;
-    sunset: number;
+  daily_units: {
+    temperature_2m_max: string;
+    temperature_2m_min: string;
   };
-  timezone: number;
-  id: number;
-  name: string;
-  cod: number;
-    
 }
