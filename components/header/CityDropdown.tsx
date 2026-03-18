@@ -6,10 +6,23 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Button } from "@/components/ui/button"
 import { useHistory } from "@/app/stores/history"
 import { useWeather } from "@/app/stores/weather"
+import { api } from "@/lib/api"
 
 const CityDropdown = () => {
     const { recentCities, clearHistory } = useHistory();
-    const { data } = useWeather();
+    const { data, setCity, setLoading } = useWeather();
+
+    const handleSelectCity = async (city: string) => {
+        setLoading(true);
+
+        try{
+            const cityReq = await api.get(`/weather?city=${city.toLocaleLowerCase()}`);
+            setCity(cityReq.data);
+            setLoading(false);
+        } catch(error) {
+            setLoading(false);
+        }
+    }
 
     return (
         <DropdownMenu>
@@ -29,6 +42,7 @@ const CityDropdown = () => {
                             <DropdownMenuItem
                                 key={index}
                                 className="cursor-pointer"
+                                onClick={() => handleSelectCity(city)}
                             >
                                 {city}
                             </DropdownMenuItem>
