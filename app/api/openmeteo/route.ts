@@ -22,10 +22,10 @@ export async function GET(request: Request) {
                 latitude,
                 longitude,
                 current: 'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code',
-                daily: 'temperature_2m_max,temperature_2m_min',
+                daily: 'temperature_2m_max,temperature_2m_min,weather_code',
                 timezone: 'auto',
                 hourly: 'temperature_2m,weather_code',
-                forecast_days: 3
+                forecast_days: 7
             }
         });
 

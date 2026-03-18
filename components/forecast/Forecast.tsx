@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useWeather } from "@/app/stores/weather"
 import HourlyForecast from "./HourlyForecast"
 import { useState } from "react"
+import DailyForecast from "./DailyForecast"
 
 const Forecast = () => {
   const [activeTab, setActiveTab] = useState('tomorrow')
@@ -44,6 +45,12 @@ const Forecast = () => {
         <TabsContent value="tomorrow" className="mt-0 outline-none">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
             {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly} day="tomorrow"/> }
+          </div>
+        </TabsContent> 
+
+        <TabsContent value="next-7-days" className="mt-0 outline-none">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+            {data?.daily && <DailyForecast daily={data.daily} /> }
           </div>
         </TabsContent> 
         
