@@ -16,7 +16,7 @@ const ForecastCard = ({ title, temp, code, active }: Props) => {
         <div className="my-2">
           <WeatherStatus code={code}/>
         </div>
-        <span className="text-2xl font-bold tracking-tight">{temp}</span>
+        <span className="text-xl font-bold tracking-tight">{temp}</span>
       </CardContent>
     </Card>
   )
