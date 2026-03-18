@@ -1,6 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card"
+import { ReactNode } from "react"
 
-const CurrentWeatherCard = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: string }) => {
+type Props = {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}
+
+const CurrentWeatherCard = ({ icon, label, value }: Props) => {
   return (
     <Card className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl-[24px]">
       <CardContent className="p-6 flex flex-col gap-3 ">
