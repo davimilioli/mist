@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     if (!city) return NextResponse.json({ error: "O nome da cidade é obrigatório" }, { status: 400 });
 
     try {
-        const cityData = await weatherService.getCityCoordinates(city);
+        const cityData = await weatherService.getCityData(city);
 
         if (!cityData) {
             return NextResponse.json({ error: "Cidade não encontrada" }, { status: 404 });

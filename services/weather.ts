@@ -4,7 +4,7 @@ import { GeoApi } from "@/types/GeoApi";
 import { ForecastItem, NextSevenDays, WeatherData } from "@/types/Weather";
 
 export const weatherService = {
-    async getCityCoordinates(city: string): Promise<GeoApi | null> {
+    async getCityData(city: string): Promise<GeoApi | null> {
         const response = await geoApi.get(`/search`, {
             params: {
                 name: city,
@@ -31,7 +31,7 @@ export const weatherService = {
     },
 
     async getWeatherData(city: string): Promise<WeatherData | null> {
-        const cityData = await this.getCityCoordinates(city);
+        const cityData = await this.getCityData(city);
 
         if (!cityData) return null;
 
