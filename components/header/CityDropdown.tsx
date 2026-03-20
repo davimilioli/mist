@@ -1,12 +1,10 @@
 "use client"
 
 import { MapPin, ChevronDown, TrashIcon } from "lucide-react"
-
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useHistory } from "@/app/stores/history"
 import { useWeather } from "@/app/stores/weather"
-import { api } from "@/lib/api"
 import { weatherService } from "@/services/weather"
 
 const CityDropdown = () => {
@@ -38,7 +36,7 @@ const CityDropdown = () => {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center ps-0gap-2 hover:bg-white hover:dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 group rounded-xl">
                     <MapPin className="w-4 h-4 text-zinc-400" />
-                    <span className="text-sm font-semibold tracking-tight">{data ? data.location : recentCities[0] || "Buscas recentes"}</span>
+                    <span className="text-sm font-semibold tracking-tight">{data ? data.city : recentCities[0] || "Buscas recentes"}</span>
                     <ChevronDown className="w-3 h-3 text-zinc-400 group-data-[state=open]:rotate-180 transition-transform" />
                 </Button>
             </DropdownMenuTrigger>

@@ -31,7 +31,7 @@ const SearchInput = () => {
             }
 
             setCity(cityReq);
-            addCityHistory(cityReq.location);
+            addCityHistory(cityReq.city);
             setLoading(false);
         } catch (error) {
             console.log('Erro ao buscar dados de clima', error);

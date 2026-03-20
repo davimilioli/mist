@@ -38,13 +38,13 @@ const Forecast = () => {
         </div>
 
         <ForecastTabContent value="today">
-          {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly} />}
+          {data?.hourlyForecast.today && <HourlyForecast hourly={data.hourlyForecast.today} />}
         </ForecastTabContent>
         <ForecastTabContent value="tomorrow">
-          {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly} day="tomorrow" />}
+          {data?.hourlyForecast.tomorrow && <HourlyForecast hourly={data.hourlyForecast.tomorrow} />}
         </ForecastTabContent>
         <ForecastTabContent value="next-7-days">
-          {data?.daily && <DailyForecast daily={data.daily} />}
+          {data?.hourlyForecast.nextSevenDays && <DailyForecast daily={data.hourlyForecast.nextSevenDays} />}
         </ForecastTabContent>
 
       </Tabs>

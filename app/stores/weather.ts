@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import { City } from "../../types/City";
+import { WeatherData } from "@/types/Weather";
 
 type Store = {
-    data: City | null;
+    data: WeatherData | null;
     isLoading: boolean;
     error: string | null;
-    setCity: (data: City) => void;
+    setCity: (data: WeatherData) => void;
     setLoading: (status: boolean) => void;
     setError: (msg: string | null) => void;
 }

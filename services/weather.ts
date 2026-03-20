@@ -1,7 +1,7 @@
 import { geoApi } from "@/lib/geoApi";
 import { openMeteoServerApi } from "@/lib/openMeteoApi";
-import { City } from "@/types/City";
 import { GeoApi } from "@/types/GeoApi";
+import { ForecastItem, NextSevenDays, WeatherData } from "@/types/Weather";
 
 export const weatherService = {
     async getCityCoordinates(city: string): Promise<GeoApi | null> {
@@ -30,12 +30,10 @@ export const weatherService = {
         return cityData;
     },
 
-    async getWeatherData(city: string): Promise<City | null> {
+    async getWeatherData(city: string): Promise<WeatherData | null> {
         const cityData = await this.getCityCoordinates(city);
 
         if (!cityData) return null;
-
-        console.log(cityData)
 
         const { latitude, longitude, name } = cityData;
 
@@ -52,8 +50,61 @@ export const weatherService = {
         });
 
         return {
-            location: name,
-            ...response.data
+            city: name,
+            latitude: response.data.latitude,
+            longitude: response.data.longitude,
+            time: response.data.current.time,
+            temperatureCurrent: {
+                temperature: response.data.current.temperature_2m,
+                temperatureMax: response.data.daily.temperature_2m_max[0],
+                temperatureMin: response.data.daily.temperature_2m_min[0],
+                humidity: response.data.current.relative_humidity_2m,
+                condition: getCondition(response.data.current.weather_code),
+                windSpeed: response.data.current.wind_speed_10m,
+            },
+            hourlyForecast: {
+                today: transformHourlyForecast(response.data.current.time, response.data.hourly, "today"),
+                tomorrow: transformHourlyForecast(response.data.current.time, response.data.hourly, "tomorrow"),
+                nextSevenDays: transformNextSevenDays(response.data.daily)
+            }
         }
     }
 }
+
+const getCondition = (code: number): string => {
+    if (code === 0) return "Ensolarado";
+    if (code >= 1 && code <= 3) return "Nublado";
+    if (code === 45 || code === 48) return "Neblina";
+    if (code >= 51 && code <= 55) return "Chuvisco";
+    if ((code >= 61 && code <= 65) || (code >= 80 && code <= 82)) return "Chuva";
+    if ((code >= 71 && code <= 77) || (code === 85 || code === 86)) return "Neve";
+    if (code >= 95 && code <= 99) return "Tempestade"
+    return "Nublado";
+}
+
+const transformHourlyForecast = (currentTime: string, hourly: { time: string[], temperature_2m: number[], weather_code: number[] }, day: 'today' | 'tomorrow'): ForecastItem[] => {
+    const currentHourIndex = new Date(currentTime).getHours();
+    const start = day === "today" ? currentHourIndex : 24;
+    const end = day === "today" ? 24 : 48;
+
+    return hourly.time.map((time, index) => ({
+        hour: new Date(time).getHours().toString().padStart(2, '0') + ":00",
+        temperature: hourly.temperature_2m[index],
+        condition: getCondition(hourly.weather_code[index])
+    })).slice(start, end);
+}
+
+const transformNextSevenDays = ((daily: { time: string[], temperature_2m_max: number[], temperature_2m_min: number[], weather_code: number[] }): NextSevenDays[] => {
+    return daily.time.map((date, index) => {
+        const dayDate = new Date(date + "T00:00:00");
+        let dayName = new Intl.DateTimeFormat('pt-BR', { weekday: 'short' }).format(dayDate);
+        dayName = dayName.charAt(0).toUpperCase() + dayName.slice(1).replace('.', '');
+
+        return {
+            day: dayName,
+            temperatureMax: daily.temperature_2m_max[index],
+            temperatureMin: daily.temperature_2m_min[index],
+            condition: getCondition(daily.weather_code[index])
+        }
+    });
+})
