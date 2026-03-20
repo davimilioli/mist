@@ -20,31 +20,31 @@ const Forecast = () => {
 
   return (
     <section className="space-y-8">
-      <Tabs className="w-full" 
+      <Tabs className="w-full"
         value={activeTab}
         onValueChange={setActiveTab}
       >
         <div className="flex items-center justify-between mb-8">
           <TabsList className="bg-transparent gap-8 p-0 h-auto">
             {tabs.map((tab) => (
-              <ForecastTabs key={tab.slug} value={tab.slug} label={tab.label} /> 
+              <ForecastTabs key={tab.slug} value={tab.slug} label={tab.label} />
             ))}
           </TabsList>
 
-{/*           <div className="hidden sm:flex bg-zinc-100 p-1 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 gap-1">
+          {/*           <div className="hidden sm:flex bg-zinc-100 p-1 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 gap-1">
             <Button variant="secondary" size="sm" className="rounded-xl bg-white-500 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 shadow-sm h-8 px-5 text-xs font-bold">Previsão</Button>
             <Button variant="ghost" size="sm" className="rounded-xl text-zinc-400 h-8 px-5 text-xs font-bold">Qualidade do ar</Button>
           </div> */}
         </div>
-      
+
         <ForecastTabContent value="today">
-          {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly}/> }
+          {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly} />}
         </ForecastTabContent>
-        <ForecastTabContent value="today">
-          {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly} day="tomorrow"/> }
+        <ForecastTabContent value="tomorrow">
+          {data?.hourly && <HourlyForecast currentTime={data.current.time} hourly={data.hourly} day="tomorrow" />}
         </ForecastTabContent>
-        <ForecastTabContent value="today">
-          {data?.daily && <DailyForecast daily={data.daily} /> }
+        <ForecastTabContent value="next-7-days">
+          {data?.daily && <DailyForecast daily={data.daily} />}
         </ForecastTabContent>
 
       </Tabs>
