@@ -1,43 +1,25 @@
 import { openMeteoServerApi } from "@/lib/openMeteoApi";
+import { weatherService } from "@/services/weather";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const city = searchParams.get('city');
 
-    if(!city) return NextResponse.json({ error: "O nome da cidade é obrigatório" }, { status: 400 });
+    if (!city) return NextResponse.json({ error: "O nome da cidade é obrigatório" }, { status: 400 });
 
     try {
-        const { origin } = new URL(request.url);
+        const cityData = await weatherService.getWeatherData(city);
 
-        const geoApiResponse = await openMeteoServerApi.get(`${origin}/api/geoapi`, {
-            params: { city: city },
-            timeout: 4000
-        })
+        if (!cityData) {
+            return NextResponse.json({ error: "Cidade não encontrada" }, { status: 404 });
+        }
 
-        const { latitude, longitude, name } = geoApiResponse.data;
-
-       const openMeteoApiResponse = await openMeteoServerApi.get('/forecast', {
-            params: {
-                latitude,
-                longitude,
-                current: 'temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code',
-                daily: 'temperature_2m_max,temperature_2m_min,weather_code',
-                timezone: 'auto',
-                hourly: 'temperature_2m,weather_code',
-                forecast_days: 7
-            }
-        });
-
-        return NextResponse.json({
-            location: name,
-            ...openMeteoApiResponse.data
-        });
-        
-    } catch(error: any) {
+        return NextResponse.json(cityData);
+    } catch (error: any) {
         console.error("Erro na API Open Meteo:", error.response?.data || error.message);
         return NextResponse.json(
-            { error: error.response?.data?.message || 'Erro ao buscar clima' }, 
+            { error: error.response?.data?.message || 'Erro ao buscar cidade' },
             { status: error.response?.status || 500 }
         );
     }
