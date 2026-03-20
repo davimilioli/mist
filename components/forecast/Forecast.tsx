@@ -10,7 +10,9 @@ import ForecastTabContent from "./ForecastTabContent"
 
 const Forecast = () => {
   const [activeTab, setActiveTab] = useState('today')
-  const { data } = useWeather();
+  const { data, isLoading } = useWeather();
+
+  if (!data && !isLoading) return null;
 
   const tabs = [
     { label: "Hoje", slug: "today" },

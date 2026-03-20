@@ -6,9 +6,14 @@ import { useWeather } from "@/app/stores/weather";
 import { formatTemp, formatWind } from "@/lib/utils";
 import LoadingSpinner from "../LoadingSpinner";
 import WeatherStatus from "../WeatherStatus";
+import EmptyState from "../EmptyState";
 
 const CurrentWeather = () => {
   const { data, isLoading } = useWeather();
+
+  if (!data && !isLoading) {
+    return <EmptyState />;
+  }
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -16,14 +21,6 @@ const CurrentWeather = () => {
         {isLoading &&
           <div className="flex flex-col items-center justify-center">
             <LoadingSpinner size={8} />
-          </div>
-        }
-
-        {!data && !isLoading &&
-          <div className="flex flex-col items-center justify-center p-10 text-gray-400 border-2 border-dashed rounded-xl">
-            <CloudSun size={48} className="mb-4" />
-            <h3 className="text-xl font-medium">Nenhuma cidade selecionada</h3>
-            <p>Digite o nome de uma cidade no topo para ver a previsão.</p>
           </div>
         }
 
