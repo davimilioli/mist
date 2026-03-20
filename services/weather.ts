@@ -1,6 +1,6 @@
 import { geoApi } from "@/lib/geoApi";
 import { openMeteoServerApi } from "@/lib/openMeteoApi";
-import { GeoApi } from "@/types/GeoApi";
+import { CitySuggestions, GeoApi } from "@/types/GeoApi";
 import { ForecastItem, NextSevenDays, WeatherData } from "@/types/Weather";
 
 export const weatherService = {
@@ -25,6 +25,7 @@ export const weatherService = {
             admin1: response.data.results[0].admin1,
             country: response.data.results[0].country,
             country_code: response.data.results[0].country_code,
+            feature_code: response.data.results[0].feature_code,
         };
 
         return cityData;
@@ -68,6 +69,39 @@ export const weatherService = {
                 nextSevenDays: transformNextSevenDays(response.data.daily)
             }
         }
+    },
+
+    async getCitySuggestions(city: string): Promise<CitySuggestions[] | null> {
+        if (!city || city.length < 3) {
+            return null;
+        }
+
+        const response = await geoApi.get(`/search`, {
+            params: {
+                name: city,
+                count: 5,
+                language: "pt",
+                format: "json"
+            },
+        });
+
+        if (!response.data.results) return null;
+
+        const citiesOnly = response.data.results.filter((city: GeoApi) =>
+            city.feature_code?.startsWith("PPL")
+        );
+
+        const formattedCities = citiesOnly.map((city: GeoApi) => ({
+            cityName: city.name,
+            state: city.admin1 || '',
+            country: city.country,
+            latitude: city.latitude,
+            longitude: city.longitude,
+        }));
+
+        return formattedCities.filter((city: CitySuggestions, index: number, listOriginal: CitySuggestions[]) =>
+            index === listOriginal.findIndex((c: CitySuggestions) => c.cityName === city.cityName)
+        );
     }
 }
 

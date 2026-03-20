@@ -5,4 +5,13 @@ export type GeoApi = {
   admin1?: string;
   country?: string;
   country_code?: string;
+  feature_code: string;
+};
+
+export type CitySuggestions = {
+  cityName: string;
+  state: string;
+  country: string;
+  latitude: number;
+  longitude: number;
 };
