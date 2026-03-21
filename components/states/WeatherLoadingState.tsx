@@ -7,7 +7,7 @@ type Props = {
     size: number;
 }
 
-const WeatherLoading = ({ size, message }: Props) => {
+const WeatherLoadingState = ({ size, message }: Props) => {
     return (
         <div className="flex flex-col items-center gap-2">
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl-[28px] transition-all duration-300 rounded-xl p-2">
@@ -21,4 +21,4 @@ const WeatherLoading = ({ size, message }: Props) => {
     )
 }
 
-export default WeatherLoading;
+export default WeatherLoadingState;

@@ -1,6 +1,6 @@
 import { CloudSun } from "lucide-react";
 
-const EmptyState = () => {
+const WeatherEmptyState = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-6 animate-in fade-in duration-500">
       <div className="bg-zinc-100/50 dark:bg-zinc-800/50 p-8 rounded-full">
@@ -16,4 +16,4 @@ const EmptyState = () => {
   );
 };
 
-export default EmptyState;
+export default WeatherEmptyState;
