@@ -41,15 +41,21 @@ const SearchInput = () => {
         try {
             const cities = await weatherService.getCitySuggestions(city);
 
+            console.log(cities)
+
             if (!cities || cities.length === 0) {
+                console.log('parou qui')
                 setSuggestionsCity([]);
                 setStatus('empty');
             } else {
+
                 setSuggestionsCity(cities);
                 setStatus('success');
             }
         } catch (err) {
+            setSuggestionsCity([]);
             setStatus('error');
+            console.error("Erro ao buscar cidades:", err);
         }
     }, 500);
 
@@ -59,9 +65,9 @@ const SearchInput = () => {
     };
 
     return (
-        <div className="w-full max-w-xl">
+        <div className="relative w-full max-w-xl">
             <Command shouldFilter={false}
-                className="relative bg-transparent border-0 shadow-none w-full h-full !p-0 !pb-0">
+                className="relative bg-transparent border-0 shadow-none !p-0 !pb-0 overflow-visible w-ful">
                 <div className="!p-0 h-full w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
                     <CommandInput
                         placeholder="Digite o nome da cidade..."
@@ -69,8 +75,8 @@ const SearchInput = () => {
                         className="!py-0 h-full w-full !bg-transparent border-0 focus:ring-0 focus:border-0"
                     />
                 </div>
-                {cityField.length >= 3 &&
-                    <CommandList className="absolute top-full left-0 w-full z-50 mt-2 bg-white dark:bg-zinc-950 border rounded-xl shadow-xl">
+                {status !== 'idle' && cityField.length >= 3 &&
+                    <CommandList className="absolute top-full left-0 w-full z-50 mt-2 bg-white dark:bg-zinc-950 border rounded-xl shadow-xl p-2">
                         {status === 'searching' &&
                             <div className="py-6 text-center text-sm text-zinc-500">
                                 Buscando cidades...
@@ -78,12 +84,14 @@ const SearchInput = () => {
                         }
                         {status === 'error' && <CommandEmpty>Erro ao buscar cidades.</CommandEmpty>}
                         {status === 'empty' && <CommandEmpty>Nenhuma cidade encontrada.</CommandEmpty>}
-                        {status === 'success' && suggestionsCity.length > 0 &&
-                            <CommandGroup heading="Cidades">
+                        {status === 'success' && suggestionsCity.length > 0 ?
+                            <CommandGroup>
                                 {suggestionsCity.map((city, index) => (
                                     <CommandItem key={index} onSelect={() => {
                                         setCityField(city.cityName);
                                         handleSearch(city.cityName);
+                                        setSuggestionsCity([]);
+                                        setStatus('idle');
                                     }}
                                         className="cursor-pointer"
                                     >
@@ -91,7 +99,7 @@ const SearchInput = () => {
                                     </CommandItem>
                                 ))}
                             </CommandGroup>
-                        }
+                            : null}
                     </CommandList>
                 }
             </Command>
