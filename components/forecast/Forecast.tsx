@@ -7,12 +7,16 @@ import { useState } from "react"
 import DailyForecast from "./DailyForecast"
 import ForecastTabs from "./ForecastTabs"
 import ForecastTabContent from "./ForecastTabContent"
+import { WeatherData } from "@/types/Weather";
 
-const Forecast = () => {
+type Props = {
+  weather: WeatherData;
+}
+
+const Forecast = ({ weather }: Props) => {
   const [activeTab, setActiveTab] = useState('today')
-  const { data } = useWeather();
 
-  if (!data) return null;
+  if (!weather) return null;
 
   const tabs = [
     { label: "Hoje", slug: "today" },
@@ -40,13 +44,13 @@ const Forecast = () => {
         </div>
 
         <ForecastTabContent value="today">
-          {data.hourlyForecast.today && <HourlyForecast hourly={data.hourlyForecast.today} />}
+          {weather.hourlyForecast.today && <HourlyForecast hourly={weather.hourlyForecast.today} />}
         </ForecastTabContent>
         <ForecastTabContent value="tomorrow">
-          {data.hourlyForecast.tomorrow && <HourlyForecast hourly={data.hourlyForecast.tomorrow} />}
+          {weather.hourlyForecast.tomorrow && <HourlyForecast hourly={weather.hourlyForecast.tomorrow} />}
         </ForecastTabContent>
         <ForecastTabContent value="next-7-days">
-          {data.hourlyForecast.nextSevenDays && <DailyForecast daily={data.hourlyForecast.nextSevenDays} />}
+          {weather.hourlyForecast.nextSevenDays && <DailyForecast daily={weather.hourlyForecast.nextSevenDays} />}
         </ForecastTabContent>
       </Tabs>
     </section>

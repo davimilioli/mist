@@ -4,41 +4,39 @@ import { ArrowDown, ArrowUp, CloudSun, Droplets, Thermometer, Wind } from "lucid
 import CurrentWeatherCard from "./CurrentWeatherCard";
 import { useWeather } from "@/app/stores/weather";
 import { formatTemp, formatWind } from "@/lib/utils";
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../states/WeatherLoading";
 import WeatherStatus from "../WeatherStatus";
+import { WeatherData } from "@/types/Weather";
 
-const CurrentWeather = () => {
-  const { data, isLoading } = useWeather();
+type Props = {
+  weather: WeatherData;
+}
 
-  if (!data) return null;
+const CurrentWeather = ({ weather }: Props) => {
+  if (!weather) return null;
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
       <div className="lg:col-span-7 space-y-6">
-        {isLoading &&
-          <div className="flex flex-col items-center justify-center">
-            <LoadingSpinner size={8} />
-          </div>
-        }
 
-        {data.temperatureCurrent && !isLoading &&
+        {weather.temperatureCurrent &&
           <>
             <div className="flex items-center gap-3 text-zinc-400 font-bold uppercase text-[10px] tracking-[0.3em]">
               <WeatherStatus
-                condition={data.temperatureCurrent.condition}
+                condition={weather.temperatureCurrent.condition}
                 showLabel={true}
               />
             </div>
             <div className="flex items-start">
-              <h2 className="text-[140px] font-thin tracking-tighter leading-none">{formatTemp(data.temperatureCurrent.temperature)}</h2>
+              <h2 className="text-[140px] font-thin tracking-tighter leading-none">{formatTemp(weather.temperatureCurrent.temperature)}</h2>
               <span className="text-5xl mt-6 font-light text-zinc-300">°C</span>
             </div>
             <div className="flex gap-6 text-sm font-medium ">
               <span className="flex items-center gap-1 text-zinc-500">
-                <ArrowUp className="w-3 h-3 text-zinc-300" /> Max: {formatTemp(data.temperatureCurrent.temperatureMax)}°
+                <ArrowUp className="w-3 h-3 text-zinc-300" /> Max: {formatTemp(weather.temperatureCurrent.temperatureMax)}°
               </span>
               <span className="flex items-center gap-1 text-zinc-400">
-                <ArrowDown className="w-3 h-3 text-zinc-300" /> Mín: {formatTemp(data.temperatureCurrent.temperatureMin)}°
+                <ArrowDown className="w-3 h-3 text-zinc-300" /> Mín: {formatTemp(weather.temperatureCurrent.temperatureMin)}°
               </span>
             </div>
           </>
@@ -46,14 +44,11 @@ const CurrentWeather = () => {
       </div>
 
       <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-        {isLoading &&
-          <LoadingSpinner size={8} />
-        }
-        {data.temperatureCurrent && !isLoading &&
+        {weather.temperatureCurrent &&
           <>
-            <CurrentWeatherCard icon={<Wind className="w-5 h-5" />} label="Vento" value={`${formatWind(data.temperatureCurrent.windSpeed)}km/h`} />
-            <CurrentWeatherCard icon={<Droplets className="w-5 h-5" />} label="Umidade" value={`${data.temperatureCurrent.humidity}%`} />
-            <CurrentWeatherCard icon={<Thermometer className="w-5 h-5" />} label="Sensação" value={`${formatTemp(data.temperatureCurrent.temperature)}°`} />
+            <CurrentWeatherCard icon={<Wind className="w-5 h-5" />} label="Vento" value={`${formatWind(weather.temperatureCurrent.windSpeed)}km/h`} />
+            <CurrentWeatherCard icon={<Droplets className="w-5 h-5" />} label="Umidade" value={`${weather.temperatureCurrent.humidity}%`} />
+            <CurrentWeatherCard icon={<Thermometer className="w-5 h-5" />} label="Sensação" value={`${formatTemp(weather.temperatureCurrent.temperature)}°`} />
           </>
         }
       </div>

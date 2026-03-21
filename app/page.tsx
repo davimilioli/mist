@@ -1,15 +1,19 @@
 import { Header } from "@/components/layout/Header"
-import Forecast from "@/components/forecast/Forecast"
-import CurrentWeather from "@/components/currentweather/CurrentWeather"
+import WeatherContent from "@/components/WeatherContent"
 
-export default function Page() {
+type Props = {
+  searchParams: Promise<{
+    city?: string;
+  }>
+}
+
+export default async function Page({ searchParams }: Props) {
+  const params = await searchParams;
+
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 flex flex-col gap-12">
       <Header />
-      <main className="space-y-12">
-        <CurrentWeather />
-        <Forecast />
-      </main>
+      <WeatherContent city={params.city} />
     </div>
   )
 }
