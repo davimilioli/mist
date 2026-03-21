@@ -6,14 +6,11 @@ import { useWeather } from "@/app/stores/weather";
 import { formatTemp, formatWind } from "@/lib/utils";
 import LoadingSpinner from "../LoadingSpinner";
 import WeatherStatus from "../WeatherStatus";
-import EmptyState from "../EmptyState";
 
 const CurrentWeather = () => {
   const { data, isLoading } = useWeather();
 
-  if (!data && !isLoading) {
-    return <EmptyState />;
-  }
+  if (!data) return null;
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -24,7 +21,7 @@ const CurrentWeather = () => {
           </div>
         }
 
-        {data && data.temperatureCurrent && !isLoading &&
+        {data.temperatureCurrent && !isLoading &&
           <>
             <div className="flex items-center gap-3 text-zinc-400 font-bold uppercase text-[10px] tracking-[0.3em]">
               <WeatherStatus
@@ -52,7 +49,7 @@ const CurrentWeather = () => {
         {isLoading &&
           <LoadingSpinner size={8} />
         }
-        {data && data.temperatureCurrent && !isLoading &&
+        {data.temperatureCurrent && !isLoading &&
           <>
             <CurrentWeatherCard icon={<Wind className="w-5 h-5" />} label="Vento" value={`${formatWind(data.temperatureCurrent.windSpeed)}km/h`} />
             <CurrentWeatherCard icon={<Droplets className="w-5 h-5" />} label="Umidade" value={`${data.temperatureCurrent.humidity}%`} />

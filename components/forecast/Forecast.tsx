@@ -10,9 +10,9 @@ import ForecastTabContent from "./ForecastTabContent"
 
 const Forecast = () => {
   const [activeTab, setActiveTab] = useState('today')
-  const { data, isLoading } = useWeather();
+  const { data } = useWeather();
 
-  if (!data && !isLoading) return null;
+  if (!data) return null;
 
   const tabs = [
     { label: "Hoje", slug: "today" },
@@ -40,15 +40,14 @@ const Forecast = () => {
         </div>
 
         <ForecastTabContent value="today">
-          {data?.hourlyForecast.today && <HourlyForecast hourly={data.hourlyForecast.today} />}
+          {data.hourlyForecast.today && <HourlyForecast hourly={data.hourlyForecast.today} />}
         </ForecastTabContent>
         <ForecastTabContent value="tomorrow">
-          {data?.hourlyForecast.tomorrow && <HourlyForecast hourly={data.hourlyForecast.tomorrow} />}
+          {data.hourlyForecast.tomorrow && <HourlyForecast hourly={data.hourlyForecast.tomorrow} />}
         </ForecastTabContent>
         <ForecastTabContent value="next-7-days">
-          {data?.hourlyForecast.nextSevenDays && <DailyForecast daily={data.hourlyForecast.nextSevenDays} />}
+          {data.hourlyForecast.nextSevenDays && <DailyForecast daily={data.hourlyForecast.nextSevenDays} />}
         </ForecastTabContent>
-
       </Tabs>
     </section>
   )

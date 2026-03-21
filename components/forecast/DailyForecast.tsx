@@ -7,8 +7,6 @@ type Props = {
 }
 
 export const DailyForecast = ({ daily }: Props) => {
-    if (!daily) return null;
-
     return (
         <>
             {daily.map((item, index) => (

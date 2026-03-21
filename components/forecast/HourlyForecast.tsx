@@ -7,8 +7,6 @@ type Props = {
 }
 
 const HourlyForecast = ({ hourly }: Props) => {
-    if (!hourly) return null;
-
     return (
         <>
             {hourly.map((item, index) =>
