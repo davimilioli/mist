@@ -4,31 +4,20 @@ import { MapPin, ChevronDown, TrashIcon } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useHistory } from "@/app/stores/history"
-import { useWeather } from "@/app/stores/weather"
-import { weatherService } from "@/services/weather"
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const CityDropdown = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const { recentCities, clearHistory } = useHistory();
-    const { data, setCity, setError, setLoading } = useWeather();
 
-    const handleSelectCity = async (city: string) => {
-        setLoading(true);
+    const city = searchParams.get("city");
 
-        try {
-            const cityReq = await weatherService.getWeatherData(city);
-
-            if (!cityReq) {
-                setError("Cidade não encontrada");
-                return;
-            }
-
-            setCity(cityReq);
-            setLoading(false);
-        } catch (error) {
-            console.log('Erro ao buscar dados de clima', error);
-            setError("Ocorreu algum erro ao pesquisar a cidade");
-            setLoading(false);
-        }
+    const handleSelectCity = (city: string) => {
+        const formattedCity = city.trim();
+        router.push(`/?city=${encodeURIComponent(formattedCity)}`);
     }
 
     return (
@@ -36,7 +25,7 @@ const CityDropdown = () => {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center ps-0gap-2 hover:bg-white hover:dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 group rounded-xl">
                     <MapPin className="w-4 h-4 text-zinc-400" />
-                    <span className="text-sm font-semibold tracking-tight">{data ? data.city : recentCities[0] || "Buscas recentes"}</span>
+                    <span className="text-sm font-semibold tracking-tight">{city ? city : recentCities[0] || "Buscas recentes"}</span>
                     <ChevronDown className="w-3 h-3 text-zinc-400 group-data-[state=open]:rotate-180 transition-transform" />
                 </Button>
             </DropdownMenuTrigger>

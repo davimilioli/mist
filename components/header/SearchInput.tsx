@@ -1,34 +1,32 @@
 "use client"
 
-import { useWeather } from "@/app/stores/weather";
 import { useState } from "react";
 import { useHistory } from "@/app/stores/history";
 import { weatherService } from "@/services/weather";
 import { useDebouncedCallback } from "use-debounce";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList, CommandGroup } from "../ui/command";
 import { CitySuggestions } from "@/types/GeoApi";
-import LoadingSpinner from "../states/WeatherLoading";
 import { useRouter } from "next/navigation";
 
 type SearchStatus = 'idle' | 'searching' | 'success' | 'error' | 'empty';
 
 const SearchInput = () => {
     const router = useRouter();
-    const { setError } = useWeather();
     const { addCityHistory } = useHistory();
     const [cityField, setCityField] = useState<string>('');
-    const [suggestionsCity, setSuggestionsCity] = useState<CitySuggestions[] | null>([]);
+    const [suggestionsCity, setSuggestionsCity] = useState<CitySuggestions[]>([]);
     const [status, setStatus] = useState<SearchStatus>('idle');
 
     const handleSearch = (city: string) => {
         if (!city || city.trim() === '') return;
 
-        setError(null);
-
         const formattedCity = city.trim();
 
         router.push(`/?city=${encodeURIComponent(formattedCity)}`);
         addCityHistory(formattedCity);
+
+        setSuggestionsCity([]);
+        setStatus("idle");
     }
 
     const debouncedSearch = useDebouncedCallback(async (city: string) => {
@@ -69,28 +67,26 @@ const SearchInput = () => {
                         onValueChange={handleCommandChange}
                         className="pr-10"
                     />
-
-                    {status === 'searching' && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
-                            <LoadingSpinner size={6} />
-                        </div>
-                    )}
                 </div>
                 {cityField.length >= 3 &&
                     <CommandList className="absolute top-full left-0 w-full z-50 mt-2 bg-white dark:bg-zinc-950 border rounded-xl shadow-xl">
+                        {status === 'searching' &&
+                            <div className="py-6 text-center text-sm text-zinc-500">
+                                Buscando cidades...
+                            </div>
+                        }
                         {status === 'error' && <CommandEmpty>Erro ao buscar cidades.</CommandEmpty>}
                         {status === 'empty' && <CommandEmpty>Nenhuma cidade encontrada.</CommandEmpty>}
-                        {status === 'success' && suggestionsCity && suggestionsCity.length > 0 &&
+                        {status === 'success' && suggestionsCity.length > 0 &&
                             <CommandGroup heading="Cidades">
                                 {suggestionsCity.map((city, index) => (
                                     <CommandItem key={index} onSelect={() => {
                                         setCityField(city.cityName);
                                         handleSearch(city.cityName);
-                                        setSuggestionsCity([]);
                                     }}
                                         className="cursor-pointer"
                                     >
-                                        {`${city.cityName}${city.state ? `, ${city.state}` : ''} - ${city.country}`}
+                                        {`${city.cityName}${city.state ? `, ${city.state}` : ''} ${city.country ? `- ${city.country}` : ''}`}
                                     </CommandItem>
                                 ))}
                             </CommandGroup>
