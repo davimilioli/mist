@@ -2,6 +2,10 @@
 
 Mist é uma aplicação web de previsão do tempo, desenvolvida com Next.js, que permite aos usuários buscar cidades e visualizar as condições meteorológicas atuais, previsões horárias e para os próximos dias.
 
+<div align="center">
+  <img src="./public/demo-project.gif" alt="Demonstração do Wallet" width="100%">
+</div>
+
 > Este projeto foi desenvolvido como um laboratório prático para consolidar conceitos do ecossistema front-end moderno utilizando Next.js e TailwindCSS.
 
 ## Funcionalidades
