@@ -5,7 +5,7 @@ import ToggleTheme from "../header/ToggleTheme"
 
 export const Header = () => {
   return (
-    <header className="flex items-center justify-between w-full">
+    <header className="flex items-center justify-between w-full gap-4">
       <CityDropdown />
       <SearchInput />
       <ToggleTheme />

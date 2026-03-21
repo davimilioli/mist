@@ -23,14 +23,14 @@ const CityDropdown = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 group rounded-xl cursor-pointer">
-                    <MapPin className="w-4 h-4 text-zinc-400" />
-                    <span className="text-sm font-semibold tracking-tight">{city ? city : recentCities[0] || "Buscas recentes"}</span>
-                    <ChevronDown className="w-3 h-3 text-zinc-400 group-data-[state=open]:rotate-180 transition-transform" />
+                <Button variant="ghost" className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 group rounded-xl cursor-pointer p-2">
+                    <MapPin className="w-4 h-4 text-zinc-500 dark:text-zinc-200" />
+                    <span className="text-sm tracking-tight hidden md:block">{city ? city : recentCities[0] || "Buscas recentes"}</span>
+                    <ChevronDown className="w-3 h-3 text-zinc-400 group-data-[state=open]:rotate-180 transition-transform hidden md:block" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56 bg-white dark:bg-zinc-900 rounded-xl">
-                <DropdownMenuLabel className="text-xs text-zinc-400 uppercase tracking-widest font-bold">Histórico</DropdownMenuLabel>
+                <DropdownMenuLabel className="text-xs text-zinc-400 uppercase font-bold">Histórico</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {recentCities.length > 0 &&
                     <>
