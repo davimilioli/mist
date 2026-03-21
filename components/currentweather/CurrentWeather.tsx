@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowDown, ArrowUp, CloudSun, Droplets, Thermometer, Wind } from "lucide-react"
+import { ArrowDown, ArrowUp, CloudSun, Droplets, MapPin, Thermometer, Wind } from "lucide-react"
 import CurrentWeatherCard from "./CurrentWeatherCard";
 import { formatTemp, formatWind } from "@/lib/utils";
 import WeatherStatus from "../WeatherStatus";
@@ -24,6 +24,10 @@ const CurrentWeather = ({ weather }: Props) => {
                 condition={weather.temperatureCurrent.condition}
                 showLabel={true}
               />
+            </div>
+            <div className="flex justify-center md:justify-start gap-2 items-center">
+              <MapPin className="w-5 h-5 text-zinc-500 dark:text-zinc-200" />
+              <span className="text-zinc-400 font-bold text-md tracking-[0.1em]">{weather.city}</span>
             </div>
             <div className="flex justify-center md:justify-start items-start">
               <h2 className="text-[140px] font-thin tracking-tighter leading-none">{formatTemp(weather.temperatureCurrent.temperature)}</h2>
