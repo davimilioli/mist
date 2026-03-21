@@ -7,43 +7,28 @@ import { weatherService } from "@/services/weather";
 import { useDebouncedCallback } from "use-debounce";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList, CommandGroup } from "../ui/command";
 import { CitySuggestions } from "@/types/GeoApi";
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../states/WeatherLoading";
+import { useRouter } from "next/navigation";
 
 type SearchStatus = 'idle' | 'searching' | 'success' | 'error' | 'empty';
 
 const SearchInput = () => {
-    const { setCity, setLoading, setError } = useWeather();
+    const router = useRouter();
+    const { setError } = useWeather();
     const { addCityHistory } = useHistory();
     const [cityField, setCityField] = useState<string>('');
     const [suggestionsCity, setSuggestionsCity] = useState<CitySuggestions[] | null>([]);
     const [status, setStatus] = useState<SearchStatus>('idle');
 
-    const handleSearch = async (city: string) => {
-        console.log(city)
-        if (!city || city.trim() === '') {
-            setLoading(false);
-            return;
-        }
+    const handleSearch = (city: string) => {
+        if (!city || city.trim() === '') return;
 
-        setLoading(true);
         setError(null);
 
-        try {
-            const cityReq = await weatherService.getWeatherData(city);
+        const formattedCity = city.trim();
 
-            if (!cityReq) {
-                setError("Cidade não encontrada");
-                return;
-            }
-
-            setCity(cityReq);
-            addCityHistory(cityReq.city);
-            setLoading(false);
-        } catch (error) {
-            console.log('Erro ao buscar dados de clima', error);
-            setError("Ocorreu algum erro ao pesquisar a cidade");
-            setLoading(false);
-        }
+        router.push(`/?city=${encodeURIComponent(formattedCity)}`);
+        addCityHistory(formattedCity);
     }
 
     const debouncedSearch = useDebouncedCallback(async (city: string) => {
