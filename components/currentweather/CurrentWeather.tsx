@@ -19,17 +19,17 @@ const CurrentWeather = ({ weather }: Props) => {
 
         {weather.temperatureCurrent &&
           <>
-            <div className="flex items-center gap-3 text-zinc-400 font-bold uppercase text-[10px] tracking-[0.3em]">
+            <div className="flex justify-center md:justify-start text-zinc-400 font-bold uppercase text-[10px] tracking-[0.3em]">
               <WeatherStatus
                 condition={weather.temperatureCurrent.condition}
                 showLabel={true}
               />
             </div>
-            <div className="flex items-start">
+            <div className="flex justify-center md:justify-start items-start">
               <h2 className="text-[140px] font-thin tracking-tighter leading-none">{formatTemp(weather.temperatureCurrent.temperature)}</h2>
               <span className="text-5xl mt-6 font-light text-zinc-300">°C</span>
             </div>
-            <div className="flex gap-6 text-sm font-medium ">
+            <div className="flex justify-center md:justify-start gap-6 text-sm font-medium ">
               <span className="flex items-center gap-1 text-zinc-500">
                 <ArrowUp className="w-3 h-3 text-zinc-300" /> Max: {formatTemp(weather.temperatureCurrent.temperatureMax)}°
               </span>
