@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mist - Previsão do Tempo
 
-## Getting Started
+Mist é uma aplicação web de previsão do tempo, desenvolvida com Next.js, que permite aos usuários buscar cidades e visualizar as condições meteorológicas atuais, previsões horárias e para os próximos dias.
 
-First, run the development server:
+> Este projeto foi desenvolvido como um laboratório prático para consolidar conceitos do ecossistema front-end moderno utilizando Next.js e TailwindCSS.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Funcionalidades
+
+- **Busca de Cidades:** Permite a pesquisa por cidades de todo o mundo, fornecendo sugestões de autocompletar.
+- **Clima Atual:** Exibição da temperatura atual do local (incluindo máxima, mínima e sensação térmica), nível de umidade e velocidade do vento.
+- **Previsão:** Separação da previsão meteorológica usando abas para as próximas *48 horas* ou para os próximos *7 dias*.
+- **Dark Mode:** Alternância nativa de interface (Claro / Escuro).
+- **Estados de Requisição:** Tratamento dos estados de requisição (cenários de Carregamento, Erro de API e Tela Inicial).
+- **Histórico de Cidades:** As cidades pesquisadas ficam salvas localmente no navegador (usando Local Storage + Zustand).
+
+## Como rodar o projeto
+
+### Pré-requisitos
+
+Possuir `Node.js` instalado na máquina local.
+
+### Instalação
+
+1. Clone o Repositório
+```
+https://github.com/davimilioli/mist
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Acesse a pasta projeto
+```
+cd mist
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Instale as dependências
+```
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Rode o projeto
+```
+npm run dev
+```
 
-## Learn More
+## Tecnologias e Bibliotecas Utilizadas
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js
+- React
+- Tailwind CSS
+- Shadcn UI
+- Lucide React
+- Axios
+- Next-themes
+- Zustand
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## APIs
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Utilização de APIs gratuitas da **[Open-Meteo](https://open-meteo.com/)**:
 
-## Deploy on Vercel
+- **Busca de Cidades**: A **[Geocoding API](https://open-meteo.com/en/docs/geocoding-api)** converte o nome da cidade em coordenadas (latitude e longitude).
+- **Dados do Clima**: A **[Weather API](https://open-meteo.com/en/docs)** pega essas coordenadas e retorna tudo: temperatura de agora, umidade, vento e a previsão para as próximas horas e dias.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Estrutura do Projeto
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+O projeto foi organizado da seguinte forma:
+
+**`app/`**
+- **`api/`** → Rotas de chamadas internas da aplicação (Proxy para evitar CORS)
+- **`stores/`** → Gerenciamento de estado global (ex.: histórico no Local Storage)
+
+**`components/`**
+  - **`ui/`** → Botões, inputs e peças básicas (Shadcn UI)
+  - **`header/`** → Pesquisa inicial e troca de temas
+  - **`currentweather/`** → Layout do clima atual de uma cidade
+  - **`forecast/`** → Previsão do tempo detalhada (horas/dias)
+  - **`states/`** → Telas de carregamento, erros e tela inicial
+  - **`WeatherContent.tsx`** → Orquestrador que agrupa a tela e decide se exibirá o conteúdo, o erro ou o loading
+
+**`types`** → Definições de tipagem global TypeScript, moldando as respostas das APIs
+
+**`services`** → Camada que agrupa toda a lógica da aplicação, a busca externa e a organização/estruturação dos dados que vêm das APIs
+
+**`lib`** → Configurações e instâncias (ex.: Axios)
+
+## Conceitos Praticados
+
+Durante o desenvolvimento deste projeto, foram colocados em prática e aprimorados os seguintes tópicos:
+- **Consumo de APIs Externas:** Realização de chamadas assíncronas e estruturação dos dados recebidos (Axios + Open-Meteo e Geocoding API).
+- **Componentização:** Separação da interface em pequenas peças modulares e reaproveitáveis (React + Shadcn UI).
+- **Gerenciamento de Estado Global:** Compartilhamento e controle de informações entre múltiplos componentes (Zustand).
+- **Estilização e Responsividade:** Construção de layouts que se ajustam a qualquer tamanho de tela sem perder qualidade (Tailwind CSS).
+
+## Autor
+
+Desenvolvido por **Davi Milioli**
