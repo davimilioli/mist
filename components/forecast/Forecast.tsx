@@ -1,7 +1,6 @@
 "use client"
 
 import { Tabs, TabsList } from "@/components/ui/tabs"
-import { useWeather } from "@/app/stores/weather"
 import HourlyForecast from "./HourlyForecast"
 import { useState } from "react"
 import DailyForecast from "./DailyForecast"

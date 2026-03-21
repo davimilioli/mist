@@ -2,9 +2,7 @@
 
 import { ArrowDown, ArrowUp, CloudSun, Droplets, Thermometer, Wind } from "lucide-react"
 import CurrentWeatherCard from "./CurrentWeatherCard";
-import { useWeather } from "@/app/stores/weather";
 import { formatTemp, formatWind } from "@/lib/utils";
-import LoadingSpinner from "../states/WeatherLoadingState";
 import WeatherStatus from "../WeatherStatus";
 import { WeatherData } from "@/types/Weather";
 
