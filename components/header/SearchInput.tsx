@@ -60,12 +60,12 @@ const SearchInput = () => {
 
     return (
         <div className="w-full max-w-xl">
-            <Command shouldFilter={false} className="relative overflow-visible border rounded-xl shadow-md">
-                <div className="relative">
+            <Command shouldFilter={false} className="relative bg-transparent border-0 shadow-none w-full h-full">
+                <div className="relative flex items-center px-3 h-full w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
                     <CommandInput
                         placeholder="Digite o nome da cidade..."
                         onValueChange={handleCommandChange}
-                        className="pr-10"
+                        className="h-full w-full !bg-transparent border-0 focus:ring-0 focus:border-0"
                     />
                 </div>
                 {cityField.length >= 3 &&

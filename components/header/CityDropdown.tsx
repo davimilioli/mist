@@ -23,7 +23,7 @@ const CityDropdown = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center ps-0gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 group rounded-xl cursor-pointer">
+                <Button variant="ghost" className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 group rounded-xl cursor-pointer">
                     <MapPin className="w-4 h-4 text-zinc-400" />
                     <span className="text-sm font-semibold tracking-tight">{city ? city : recentCities[0] || "Buscas recentes"}</span>
                     <ChevronDown className="w-3 h-3 text-zinc-400 group-data-[state=open]:rotate-180 transition-transform" />
