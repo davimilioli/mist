@@ -3,10 +3,11 @@
 import { WeatherData } from "@/types/Weather"
 import CurrentWeather from "./currentweather/CurrentWeather"
 import Forecast from "./forecast/Forecast"
-import EmptyState from "./states/EmptyState";
 import { useEffect, useState } from "react";
 import { weatherService } from "@/services/weather";
-import LoadingSpinner from "./states/WeatherLoading";
+import WeatherEmptyState from "./states/WeatherEmptyState";
+import WeatherLoadingState from "./states/WeatherLoadingState";
+import WeatherErrorState from "./states/WeatherError";
 
 type Props = {
     city?: string;
@@ -15,29 +16,39 @@ type Props = {
 const WeatherContent = ({ city }: Props) => {
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         if (!city) return;
 
         const cityReq = async () => {
-            setLoading(true);
-            const weatherData = await weatherService.getWeatherData(city);
+            try {
+                setLoading(true);
+                setError(false);
 
-            setWeather(weatherData);
-            setLoading(false);
+                const weatherData = await weatherService.getWeatherData(city);
+
+                if (!weatherData) {
+                    setError(true);
+                    return;
+                }
+
+                setWeather(weatherData);
+
+            } catch (err) {
+                console.error("Erro ao buscar clima:", err);
+                setError(true);
+            } finally {
+                setLoading(false);
+            }
         }
 
         cityReq();
     }, [city]);
 
-    if (!city) return <EmptyState />;
-
-    if (loading) {
-        return (
-            <LoadingSpinner size={3} message="Buscando informações de clima..." />
-        )
-    }
-
+    if (!city) return <WeatherEmptyState />;
+    if (loading) return <WeatherLoadingState size={3} message="Buscando informações de clima..." />
+    if (error) return <WeatherErrorState />;
     if (!weather) return null;
 
     return (
