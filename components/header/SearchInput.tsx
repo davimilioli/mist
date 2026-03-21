@@ -27,6 +27,7 @@ const SearchInput = () => {
 
         setSuggestionsCity([]);
         setStatus("idle");
+        setCityField("")
     }
 
     const debouncedSearch = useDebouncedCallback(async (city: string) => {
@@ -72,6 +73,7 @@ const SearchInput = () => {
                     <CommandInput
                         placeholder="Digite o nome da cidade..."
                         onValueChange={handleCommandChange}
+                        value={cityField}
                         className="!py-0 h-full w-full !bg-transparent border-0 focus:ring-0 focus:border-0"
                     />
                 </div>
