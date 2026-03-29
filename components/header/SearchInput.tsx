@@ -7,6 +7,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList, CommandGroup } from "../ui/command";
 import { CitySuggestions } from "@/types/GeoApi";
 import { useRouter } from "next/navigation";
+import { createSlug } from "@/lib/utils";
 
 type SearchStatus = 'idle' | 'searching' | 'success' | 'error' | 'empty';
 
@@ -20,9 +21,10 @@ const SearchInput = () => {
     const handleSearch = (city: string) => {
         if (!city || city.trim() === '') return;
 
-        const formattedCity = city.trim();
+        const slug = createSlug(city);
+        router.push(`/?city=${slug}`);
 
-        router.push(`/?city=${encodeURIComponent(formattedCity)}`);
+        const formattedCity = city.trim();
         addCityHistory(formattedCity);
 
         setSuggestionsCity([]);

@@ -4,28 +4,29 @@ import { MapPin, ChevronDown, TrashIcon } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useHistory } from "@/app/stores/history"
-import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { createSlug, unslugify } from "@/lib/utils";
 
 const CityDropdown = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-
     const { recentCities, clearHistory } = useHistory();
 
-    const city = searchParams.get("city");
+    const citySlug = searchParams.get("city");
 
     const handleSelectCity = (city: string) => {
         const formattedCity = city.trim();
-        router.push(`/?city=${encodeURIComponent(formattedCity)}`);
+        router.push(`/?city=${createSlug(formattedCity)}`);
     }
+
+    const labelCity = citySlug ? recentCities.find(c => createSlug(c) === citySlug) || unslugify(citySlug) : recentCities[0] || "Buscas recentes";
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 group rounded-xl cursor-pointer p-2">
                     <MapPin className="w-4 h-4 text-zinc-500 dark:text-zinc-200" />
-                    <span className="text-sm tracking-tight hidden md:block">{city ? city : recentCities[0] || "Buscas recentes"}</span>
+                    <span className="text-sm tracking-tight hidden md:block">{labelCity}</span>
                     <ChevronDown className="w-3 h-3 text-zinc-400 group-data-[state=open]:rotate-180 transition-transform hidden md:block" />
                 </Button>
             </DropdownMenuTrigger>
