@@ -1,3 +1,4 @@
+import { getResource } from "@/lib/api";
 import { geoApi } from "@/lib/geoApi";
 import { openMeteoServerApi } from "@/lib/openMeteoApi";
 import { CitySuggestions, GeoApi } from "@/types/GeoApi";
@@ -5,27 +6,31 @@ import { ForecastItem, NextSevenDays, WeatherData } from "@/types/Weather";
 
 export const weatherService = {
     async getCityData(city: string): Promise<GeoApi | null> {
-        const response = await geoApi.get(`/search`, {
+        const response = await getResource<any>('https://geocoding-api.open-meteo.com/v1/search', {
             params: {
                 name: city,
                 count: 1,
                 language: "pt",
                 format: "json"
             },
+            next: {
+                revalidate: 86400,
+                tags: ['city-data', `city-${city.toLocaleLowerCase()}`]
+            }
         });
 
-        if (!response.data.results || response.data.results.length === 0) {
+        if (!response.results || response.results.length === 0) {
             return null;
         }
 
         const cityData: GeoApi = {
-            name: response.data.results[0].name,
-            latitude: response.data.results[0].latitude,
-            longitude: response.data.results[0].longitude,
-            admin1: response.data.results[0].admin1,
-            country: response.data.results[0].country,
-            country_code: response.data.results[0].country_code,
-            feature_code: response.data.results[0].feature_code,
+            name: response.results[0].name,
+            latitude: response.results[0].latitude,
+            longitude: response.results[0].longitude,
+            admin1: response.results[0].admin1,
+            country: response.results[0].country,
+            country_code: response.results[0].country_code,
+            feature_code: response.results[0].feature_code,
         };
 
         return cityData;
@@ -38,7 +43,7 @@ export const weatherService = {
 
         const { latitude, longitude, name } = cityData;
 
-        const response = await openMeteoServerApi.get('/forecast', {
+        const response = await getResource<any>('https://api.open-meteo.com/v1/forecast', {
             params: {
                 latitude,
                 longitude,
@@ -47,26 +52,30 @@ export const weatherService = {
                 timezone: 'auto',
                 hourly: 'temperature_2m,weather_code',
                 forecast_days: 7
+            },
+            next: {
+                revalidate: 3600,
+                tags: ['weather-data', `weather-´${city.toLocaleLowerCase()}`]
             }
         });
 
         return {
             city: name,
-            latitude: response.data.latitude,
-            longitude: response.data.longitude,
-            time: response.data.current.time,
+            latitude: response.latitude,
+            longitude: response.longitude,
+            time: response.current.time,
             temperatureCurrent: {
-                temperature: response.data.current.temperature_2m,
-                temperatureMax: response.data.daily.temperature_2m_max[0],
-                temperatureMin: response.data.daily.temperature_2m_min[0],
-                humidity: response.data.current.relative_humidity_2m,
-                condition: getCondition(response.data.current.weather_code),
-                windSpeed: response.data.current.wind_speed_10m,
+                temperature: response.current.temperature_2m,
+                temperatureMax: response.daily.temperature_2m_max[0],
+                temperatureMin: response.daily.temperature_2m_min[0],
+                humidity: response.current.relative_humidity_2m,
+                condition: getCondition(response.current.weather_code),
+                windSpeed: response.current.wind_speed_10m,
             },
             hourlyForecast: {
-                today: transformHourlyForecast(response.data.current.time, response.data.hourly, "today"),
-                tomorrow: transformHourlyForecast(response.data.current.time, response.data.hourly, "tomorrow"),
-                nextSevenDays: transformNextSevenDays(response.data.daily)
+                today: transformHourlyForecast(response.current.time, response.hourly, "today"),
+                tomorrow: transformHourlyForecast(response.current.time, response.hourly, "tomorrow"),
+                nextSevenDays: transformNextSevenDays(response.daily)
             }
         }
     },
@@ -76,7 +85,7 @@ export const weatherService = {
             return null;
         }
 
-        const response = await geoApi.get(`/search`, {
+        const response = await getResource<any>(`https://geocoding-api.open-meteo.com/v1/search`, {
             params: {
                 name: city,
                 count: 5,
@@ -85,11 +94,9 @@ export const weatherService = {
             },
         });
 
-        if (!response.data.results) return null;
+        if (!response.results) return null;
 
-        const citiesOnly = response.data.results.filter((city: GeoApi) =>
-            city.feature_code?.startsWith("PPL")
-        );
+        const citiesOnly = response.results.filter((city: GeoApi) => city.feature_code?.startsWith("PPL"));
 
         const formattedCities = citiesOnly.map((city: GeoApi) => ({
             cityName: city.name,
