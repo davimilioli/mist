@@ -1,4 +1,3 @@
-import { openMeteoServerApi } from "@/lib/openMeteoApi";
 import { weatherService } from "@/services/weather";
 import { NextResponse } from "next/server";
 

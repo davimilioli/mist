@@ -117,15 +117,25 @@ const getCondition = (code: number): string => {
 }
 
 const transformHourlyForecast = (currentTime: string, hourly: { time: string[], temperature_2m: number[], weather_code: number[] }, day: 'today' | 'tomorrow'): ForecastItem[] => {
-    const currentHourIndex = new Date(currentTime).getHours();
-    const start = day === "today" ? currentHourIndex : 24;
+    const currentHourString = currentTime.substring(0, 13) + ":00";
+
+    let currentIndex = hourly.time.findIndex(time => time === currentHourString);
+    if (currentIndex === -1) currentIndex = 0;
+
+    const start = day === "today" ? currentIndex : 24;
     const end = day === "today" ? 24 : 48;
 
-    return hourly.time.map((time, index) => ({
-        hour: new Date(time).getHours().toString().padStart(2, '0') + ":00",
-        temperature: hourly.temperature_2m[index],
-        condition: getCondition(hourly.weather_code[index])
-    })).slice(start, end);
+    return hourly.time.slice(start, end).map((time, index) => {
+        const realIndex = start + index;
+
+        const hourString = time.substring(11, 16);
+
+        return {
+            hour: hourString,
+            temperature: hourly.temperature_2m[realIndex],
+            condition: getCondition(hourly.weather_code[realIndex])
+        };
+    });
 }
 
 const transformNextSevenDays = ((daily: { time: string[], temperature_2m_max: number[], temperature_2m_min: number[], weather_code: number[] }): NextSevenDays[] => {
