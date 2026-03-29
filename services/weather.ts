@@ -1,6 +1,4 @@
 import { getResource } from "@/lib/api";
-import { geoApi } from "@/lib/geoApi";
-import { openMeteoServerApi } from "@/lib/openMeteoApi";
 import { CitySuggestions, GeoApi } from "@/types/GeoApi";
 import { ForecastItem, NextSevenDays, WeatherData } from "@/types/Weather";
 
