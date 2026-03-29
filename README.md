@@ -52,7 +52,6 @@ npm run dev
 - Tailwind CSS
 - Shadcn UI
 - Lucide React
-- Axios
 - Next-themes
 - Zustand
 
@@ -83,12 +82,12 @@ O projeto foi organizado da seguinte forma:
 
 **`services`** → Camada que agrupa toda a lógica da aplicação, a busca externa e a organização/estruturação dos dados que vêm das APIs
 
-**`lib`** → Configurações e instâncias (ex.: Axios)
+**`lib`** → Configurações e instâncias.
 
 ## Conceitos Praticados
 
 Durante o desenvolvimento deste projeto, foram colocados em prática e aprimorados os seguintes tópicos:
-- **Consumo de APIs Externas:** Realização de chamadas assíncronas e estruturação dos dados recebidos (Axios + Open-Meteo e Geocoding API).
+- **Consumo de APIs Externas:** Realização de chamadas assíncronas e estruturação dos dados recebidos (Open-Meteo e Geocoding API).
 - **Componentização:** Separação da interface em pequenas peças modulares e reaproveitáveis (React + Shadcn UI).
 - **Gerenciamento de Estado Global:** Compartilhamento e controle de informações entre múltiplos componentes (Zustand).
 - **Estilização e Responsividade:** Construção de layouts que se ajustam a qualquer tamanho de tela sem perder qualidade (Tailwind CSS).
